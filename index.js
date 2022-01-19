@@ -39,14 +39,45 @@ Airplane.prototype.land = function () {
         + It should return a string with `name` and `age`. Example: "Mary, 50"
 */
 
-function Person() {
-  
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+  this.stomach = [];
+}
+Person.prototype.eat = function(edible){
+  if(this.stomach.length < 10){
+    this.stomach.push(edible);
+  }
+}
+
+Person.prototype.poop = function(){
+  this.stomach = [];
+}
+
+Person.prototype.toString = function(){
+  return `${this.name}, ${this.age}`;
 }
 
 
+// create some new people
 
+const sallie = new Person ('Sallie', 26)
+const mark = new Person ('Mark', 23)
+const cori = new Person ('Cori', 25)
 
+console.log(sallie.toString());
+console.log(mark.toString());
+console.log(cori.toString());
 
+mark.eat('pizza');
+mark.eat('spaghetti');
+mark.eat('ramen');
+
+console.log(mark.stomach);
+
+mark.poop();
+
+console.log(mark.stomach);
 
 
 /*
@@ -63,9 +94,38 @@ function Person() {
         + The `drive` method should return a string "I ran out of fuel at x miles!" x being `odometer`.
 */
 
-function Car() {
-  
+function Car(model, milesPerGallon) {
+  this.model = model;
+  this.milesPerGallon = milesPerGallon;
+  this.tank = 0;
+  this.odometer = 0;
 }
+
+Car.prototype.fill = function(gallons){
+  this.tank = this.tank + gallons;
+}
+
+Car.prototype.drive = function(distance){
+  this.odometer = this.odometer + distance;
+  this.tank = this.tank - (distance / this.milesPerGallon)};
+  //My attempt at stretch 2 below - couldn't get it.
+//   if((this.tank - (distance / this.milesPerGallon)) === 0){
+//     return `I ran out of fuel at ${this.odometer} miles!`
+//   } else if(this.tank - (distance / this.milesPerGallon) < 0){
+//     return `I ran out of fuel at ${((this.tank + (distance / this.milesPerGallon)) * (this.odometer + distance)) / 10} miles!`
+// } else {
+//   return `Tank has ${this.tank} gallons left`
+// } };
+
+const hummer = new Car('Hummer', 5)
+
+hummer.fill(5);
+hummer.drive(20);
+console.log('task 2', hummer);
+
+// console.log('task 2, stretch 2: ', hummer.drive(30));
+
+console.log()
 
 
 /*
@@ -75,18 +135,28 @@ function Car() {
     - Besides the methods on Person.prototype, babies have the ability to `.play()`:
         + Should return a string "Playing with x", x being the favorite toy.
 */
-function Baby() {
- 
+function Baby(name, age, favoriteToy) {
+ Person.call(this, name, age);
+ this.favoriteToy = favoriteToy;
+}
+Baby.prototype = Object.create(Person.prototype);
+
+Baby.prototype.play = function() {
+  return `Playing with ${this.favoriteToy}.`
 }
 
+const doug = new Baby('Doug', 1, 'car')
 
+doug.eat('strawberry');
+console.log('task 3a', doug);
+console.log('task 3b', doug.play());
 /* 
   TASK 4
   In your own words explain the four principles for the "this" keyword below:
-  1. 
-  2. 
-  3. 
-  4. 
+  1. Within the global scope, the value of 'this' will be the window object.
+  2. When a function is called by a preceding dot, the object left of the dot gets 'this'. Also known as, "implicit".
+  3. New binding - 'this' refers to a specific instance of an object that is created and return by a constructor function
+  4. Explicit binding - explicitling defining 'this' using the 'call' or 'apply' method
 */
 
 
